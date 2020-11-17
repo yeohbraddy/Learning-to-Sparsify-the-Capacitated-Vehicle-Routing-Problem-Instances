@@ -35,7 +35,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/yeohbraddy/FYP-Braddy">
-    <img src="./COMP30900/Images/UCD%20Logo.png" alt="Logo" width=400" height="500">
+    <img src="./COMP30900/Images/UCD%20Logo.png" alt="Logo" width=350" height="500">
   </a>
 
   <h3 align="center">Using ML Techniques to Solve Combinatorial Optimization Problems</h3>
