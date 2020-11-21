@@ -3,7 +3,7 @@
     Meeting Minutes
   </h2>
   <h3 align="center">
-    11-09-20
+    16-09-20
   </h3>
 
 
@@ -13,7 +13,7 @@
   <h4>
     Opening:
   </h4>
-  The regular meeting between Braddy and Deepak at 11.15am on November 18th, 2020 on Zoom
+  The regular meeting between Braddy and Deepak at 11.15am on November 16th, 2020 on Zoom
 
   <h4>
     Present:
@@ -96,10 +96,9 @@
   <h4>
     Agenda for the next meeting:
   </h4>
-  TBD
-
+How to do literature review
   <h4>
     Adjournment:
   </h4>
-  Meeting was adjourned at 12pm. Next meeting will be at 11.15am on November 25th, 2020 on Zoom
+  Meeting was adjourned at 12pm. Next meeting will be at 11.15am on November 23rd, 2020 on Zoom
 </div>
