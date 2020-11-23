@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="Images/UCD%20Logo.png" alt="Logo" width="80" height="80">
+    <img src="Images/UCD%20Logo.png" alt="Logo" width=350" height="500">
   </a>
 
   <h3 align="center">Using ML Techniques to Solve Combinatorial Optimization Problems</h3>
