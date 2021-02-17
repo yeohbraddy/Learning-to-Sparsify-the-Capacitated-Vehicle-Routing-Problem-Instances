@@ -41,7 +41,7 @@ MST_V_DEGREE = "MST_V_DEGREE"
 # In[3]:
 
 
-columnNames = [
+column_names = [
     U_NODE_ID,
     V_NODE_ID,
     U_X,

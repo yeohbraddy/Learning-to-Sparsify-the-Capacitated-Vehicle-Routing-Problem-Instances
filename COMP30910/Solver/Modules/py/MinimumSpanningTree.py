@@ -13,52 +13,52 @@ import networkx as nx
 
 class MinimumSpanningTree:
     def __init__(self, G):
-        self.MST = nx.minimum_spanning_tree(G)
-        self.mstEdges = []
-        self.addedMstEdges = set()
-        self.mstWeight = []
+        self.mst = nx.minimum_spanning_tree(G)
+        self.mst_edges = []
+        self.added_mst_edges = set()
+        self.mst_weight = []
         self.node_u_degree = []
         self.node_v_degree = []
         
-    def addMSTFeatures(self, node_u, node_v, weight):
-        self.addMSTEdge(node_u, node_v)
-        self.addMSTWeight(weight)
-        self.node_u_degree.append(self.getMSTNodeDegree(node_u))
-        self.node_v_degree.append(self.getMSTNodeDegree(node_v))
+    def add_mst_features(self, node_u, node_v, weight):
+        self.add_mst_edge(node_u, node_v)
+        self.add_mst_weight(weight)
+        self.node_u_degree.append(self.get_mst_node_degree(node_u))
+        self.node_v_degree.append(self.get_mst_node_degree(node_v))
         
-    def addMSTEdge(self, node_u, node_v):
-        isMSTEdge = 0
+    def add_mst_edge(self, node_u, node_v):
+        is_mst_edge = 0
         
-        if self.checkEdgeIsLegal(node_u, node_v):
-            isMSTEdge = 1
+        if self.check_edge_is_legal(node_u, node_v):
+            is_mst_edge = 1
         else:
-            isMSTEdge = 0
+            is_mst_edge = 0
             
-        self.mstEdges.append(isMSTEdge)
+        self.mst_edges.append(is_mst_edge)
         
-    def addMSTWeight(self, weight):
-        self.mstWeight.append(weight)
+    def add_mst_weight(self, weight):
+        self.mst_weight.append(weight)
         
-    def getMSTNodeDegree(self, nodeID):
-        for (node, degree) in self.MST.degree:
+    def get_mst_node_degree(self, nodeID):
+        for (node, degree) in self.mst.degree:
             if node == nodeID:
                 return degree
         
-    def checkEdgeIsLegal(self, node_u, node_v):
-        return (not (self.isAddedEdge(node_u, node_v) and                      self.isAddedEdge(node_v, node_u))) and (self.isMSTEdge(node_u, node_v) or                      self.isMSTEdge(node_v, node_u))
+    def check_edge_is_legal(self, node_u, node_v):
+        return (not (self.is_added_edge(node_u, node_v) and self.is_added_edge(node_v, node_u))) and (self.is_mst_edge(node_u, node_v) or self.is_mst_edge(node_v, node_u))
         
-    def isAddedEdge(self, node_u, node_v):
-        return (node_u, node_v) in self.addedMstEdges
+    def is_added_edge(self, node_u, node_v):
+        return (node_u, node_v) in self.added_mst_edges
 
-    def isMSTEdge(self, node_u, node_v):
-        return (node_u, node_v) in self.MST.edges
+    def is_mst_edge(self, node_u, node_v):
+        return (node_u, node_v) in self.mst.edges
     
     def getMST(self):
-        return self.MST.degree
+        return self.mst.degree
     
-    def addToDF(self, df):
-        df[c.IS_MST_EDGE] = self.mstEdges
-        df[c.MST_WEIGHT] = self.mstWeight
+    def add_to_df(self, df):
+        df[c.IS_MST_EDGE] = self.mst_edges
+        df[c.MST_WEIGHT] = self.mst_weight
         df[c.MST_U_DEGREE] = self.node_u_degree
         df[c.MST_V_DEGREE] = self.node_v_degree
         

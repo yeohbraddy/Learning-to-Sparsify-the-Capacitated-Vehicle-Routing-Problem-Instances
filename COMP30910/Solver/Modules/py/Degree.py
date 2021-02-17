@@ -17,7 +17,7 @@ class Degree:
         self.v_node_degree = []
         self.node_average_degree = []
         
-    def addDegrees(self, node_u, node_v):
+    def add_degrees(self, node_u, node_v):
         node_u_degree = self.degrees[node_u]
         node_v_degree = self.degrees[node_v]
 
@@ -25,7 +25,7 @@ class Degree:
         self.v_node_degree.append(node_v_degree)
         self.node_average_degree.append((node_u_degree + node_v_degree) / 2)
     
-    def addToDF(self, df):
+    def add_to_df(self, df):
         df[c.U_NODE_DEGREE] = self.u_node_degree
         df[c.V_NODE_DEGREE] = self.v_node_degree
         df[c.AVERAGE_NODE_DEGREE] = self.node_average_degree
