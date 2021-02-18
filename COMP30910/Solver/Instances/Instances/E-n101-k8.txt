@@ -1,5 +1,5 @@
 NAME : E-n101-k8
-COMMENT : (Christophides and Eilon, Min no of trucks: 8, Best value: 817)
+COMMENT : (Christophides and Eilon, No of trucks: 8, Best value: 817)
 TYPE : CVRP
 DIMENSION : 101
 EDGE_WEIGHT_TYPE : EUC_2D

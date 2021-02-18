@@ -1,5 +1,5 @@
 NAME : E-n30-k3
-COMMENT : (Christophides and Eilon, Min no of trucks: 3, Optimal value: 534)
+COMMENT : (Christophides and Eilon, No of trucks: 3, Optimal value: 534)
 TYPE : CVRP
 DIMENSION : 30
 EDGE_WEIGHT_TYPE : EUC_2D
