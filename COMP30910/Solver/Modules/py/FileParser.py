@@ -4,6 +4,11 @@
 # In[2]:
 
 import re
+from os import listdir
+from os.path import isfile, join
+
+def get_instances(path):
+    return [f for f in listdir(path) if isfile(join(path, f))]
 
 def parse_num_vehicles(line):
     x = re.findall(r"No of trucks: [0-9]", line)
@@ -32,7 +37,7 @@ def read_instance(file):
     COORD_FLAG, DEMAND_FLAG = False, False
 
     xc, yc = [], []
-    coords, q = {}, {}
+    coords, q, coords_node_id_dict = {}, {}, {}
 
     fh = open("../Instances/Instances/" + file, 'r')
     for i, line in enumerate(fh):
@@ -54,12 +59,13 @@ def read_instance(file):
             xc.append(coord[1])
             yc.append(coord[2])
             coords[coord[0]] = [coord[1], coord[2]]
+            coords_node_id_dict[(coord[1], coord[2])] = coord[0]
         elif DEMAND_FLAG:
             demand = parse_demand(line)
             q[demand[0]] = demand[1]
     fh.close()
 
-    return xc, yc, coords, q, Q, p, n
+    return xc, yc, coords, q, Q, p, n, coords_node_id_dict
 
 
 def read_solution(file):
