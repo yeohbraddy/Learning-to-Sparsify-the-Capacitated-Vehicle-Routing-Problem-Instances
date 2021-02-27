@@ -56,7 +56,7 @@ def label_matrix(coords, arr):
 
     return incidence_matrix 
 
-def create_edges_df(coords, routes):
+def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles):
     edges_in_optimal_route = get_edges_in_optimal_route(routes)
     incidence_matrix = init_incident_matrix(coords, len(coords))
     edges_dict = defaultdict(list)
@@ -81,6 +81,11 @@ def create_edges_df(coords, routes):
                 edges_dict[c.V_Y].append(coord_v[1])
                 edges_dict[c.V_NODE_ID].append(v)
 
+                edges_dict[c.FILE_NAME].append(file_name)
+                edges_dict[c.U_NODE_DEMAND].append(demand[int(u)])
+                edges_dict[c.V_NODE_DEMAND].append(demand[int(v)])
+                edges_dict[c.CAPACITY].append(capacity)
+                edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles)
 
                 edges_dict[c.EDGE_WEIGHT].append(edge_weight)
                 dict_global_edge_rank[index] = edge_weight
@@ -104,7 +109,7 @@ def create_edges_df(coords, routes):
 
     return pd.DataFrame(edges_dict), dict_global_edge_rank, incidence_matrix
 
-def build_graph(df, is_optimal_edges_only):
+def build_graph(df, is_optimal_edges_only = False):
     plt.rcParams["figure.figsize"] = [16,9]
     
     if is_optimal_edges_only:
