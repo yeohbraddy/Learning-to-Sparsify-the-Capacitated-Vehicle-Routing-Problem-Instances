@@ -39,7 +39,7 @@ def read_instance(file):
     xc, yc = [], []
     coords, q, coords_node_id_dict = {}, {}, {}
 
-    fh = open("../Instances/Instances/" + file, 'r')
+    fh = open(file, 'r')
     for i, line in enumerate(fh):
         if "CAPACITY" in line:
             Q = parse_for_num(line)
@@ -69,7 +69,7 @@ def read_instance(file):
 
 
 def read_solution(file):
-    fh = open("../Instances/Solutions/" + file, 'r')  # A-n32-k5-solution.txt
+    fh = open(file, 'r')  # A-n32-k5-solution.txt
     routes = {}
     for i, line in enumerate(fh):
         if "Route #" in line:
