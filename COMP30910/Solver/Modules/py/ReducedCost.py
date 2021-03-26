@@ -1,9 +1,10 @@
 import Constants as c
 
 class ReducedCost:
-    def __init__(self, reduced_cost_dict):
+    def __init__(self, reduced_cost_dict, num_of_nodes):
         self.reduced_cost_dict = reduced_cost_dict
         self.reduced_cost = []
+        self.num_of_nodes = num_of_nodes
 
     def add_reduced_cost(self, node_u, node_v):
         num = self.reduced_cost_dict[(int(node_u) - 1, int(node_v) - 1)]

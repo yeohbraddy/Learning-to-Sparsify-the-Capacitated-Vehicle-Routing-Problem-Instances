@@ -12,15 +12,16 @@ import networkx as nx
 
 
 class Clustering:
-    def __init__(self, G):
+    def __init__(self, G, num_of_nodes):
         self.clustering = nx.clustering(G)
         self.u_node_clustering = []
         self.v_node_clustering = []
         self.average_node_clustering = []
+        self.num_of_nodes = num_of_nodes
     
     def add_clusterings(self, node_u, node_v):
-        node_u_clustering = self.clustering[node_u]
-        node_v_clustering = self.clustering[node_v]
+        node_u_clustering = self.clustering[node_u] / self.num_of_nodes
+        node_v_clustering = self.clustering[node_v] / self.num_of_nodes
         
         self.u_node_clustering.append(node_u_clustering)
         self.v_node_clustering.append(node_v_clustering)

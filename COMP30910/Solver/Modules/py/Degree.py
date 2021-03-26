@@ -11,13 +11,17 @@ import Constants as c
 
 
 class Degree:
-    def __init__(self, G):
+    def __init__(self, G, num_of_nodes):
         self.degrees = G.degree
         self.u_node_degree = []
         self.v_node_degree = []
         self.node_average_degree = []
+        self.num_of_nodes = num_of_nodes
         
     def add_degrees(self, node_u, node_v):
+        # node_u_degree = self.degrees[node_u] / self.num_of_nodes
+        # node_v_degree = self.degrees[node_v] / self.num_of_nodes
+
         node_u_degree = self.degrees[node_u]
         node_v_degree = self.degrees[node_v]
 

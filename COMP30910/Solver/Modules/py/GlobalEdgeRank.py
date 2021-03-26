@@ -11,9 +11,10 @@ import Constants as c
 
 
 class GlobalEdgeRank:
-    def __init__(self, global_ranking_dict):
+    def __init__(self, global_ranking_dict, num_of_nodes):
         self.global_ranking_dict = self.sort_global_ranks(global_ranking_dict)
         self.global_edge_rank = []
+        self.num_of_nodes = num_of_nodes
         
     def add_ranking(self, edge_weight):
         self.global_edge_rank.append(self.global_ranking_dict[edge_weight])

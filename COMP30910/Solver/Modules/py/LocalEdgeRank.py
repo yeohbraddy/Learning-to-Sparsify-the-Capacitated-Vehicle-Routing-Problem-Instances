@@ -11,10 +11,11 @@ import Constants as c
 
 
 class LocalEdgeRank:
-    def __init__(self, incidence_matrix):
+    def __init__(self, incidence_matrix, num_of_nodes):
         self.incidence_matrix = incidence_matrix
         self.u_node_local_edge_rank = []
         self.v_node_local_edge_rank = []
+        self.num_of_nodes = num_of_nodes
         
     def add_rankings(self, node_u, node_v):
         self.u_node_local_edge_rank.append(self.calculate_local_rank(node_u, node_v))

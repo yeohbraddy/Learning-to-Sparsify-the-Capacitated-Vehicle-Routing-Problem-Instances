@@ -12,13 +12,14 @@ import networkx as nx
 
 
 class MinimumSpanningTree:
-    def __init__(self, G):
+    def __init__(self, G, num_of_nodes):
         self.mst = nx.minimum_spanning_tree(G)
         self.mst_edges = []
         self.added_mst_edges = set()
         self.mst_weight = []
         self.node_u_degree = []
         self.node_v_degree = []
+        self.num_of_nodes = num_of_nodes
         
     def add_mst_features(self, node_u, node_v, weight):
         self.add_mst_edge(node_u, node_v)

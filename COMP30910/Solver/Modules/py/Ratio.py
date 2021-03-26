@@ -1,11 +1,12 @@
 import Constants as c
 
 class Ratio:
-    def __init__(self, demands, capacity):
+    def __init__(self, demands, capacity, num_of_nodes):
         self.demands = demands
         self.capacity = capacity
         self.demand_capacity_ratio_node_u = []
         self.demand_capacity_ratio_node_v = []
+        self.num_of_nodes = num_of_nodes
 
     def add_ratios(self, node_u, node_v):
         ratio = self.calculate_demand_to_capacity(node_u)
