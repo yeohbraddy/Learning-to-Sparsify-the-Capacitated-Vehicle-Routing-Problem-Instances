@@ -83,7 +83,7 @@ def generate_features(is_prune):
     
     df = pd.DataFrame(columns = c.column_names)
     
-    is_prune = True
+    is_prune = is_prune
 
     instances = instances_prune_files if is_prune else instances_files
     solutions = solutions_prune_files if is_prune else solutions_files
