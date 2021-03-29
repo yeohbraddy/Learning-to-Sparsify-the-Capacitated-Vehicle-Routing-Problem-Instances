@@ -25,7 +25,7 @@ class LocalEdgeRank:
         row = self.incidence_matrix[node_u]
         sorted_row = row.sort_values(ascending=True)
         
-        return sorted_row[node_v]
+        return sorted_row[node_v] / self.num_of_nodes
     
     def add_to_df(self, df):
         df[c.U_NODE_LOCAL_EDGE_RANK] = self.u_node_local_edge_rank

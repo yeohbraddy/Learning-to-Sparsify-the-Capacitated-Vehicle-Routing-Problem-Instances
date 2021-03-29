@@ -35,7 +35,7 @@ class MinimumSpanningTree:
         else:
             is_mst_edge = 0
             
-        self.mst_edges.append(is_mst_edge)
+        self.mst_edges.append(is_mst_edge / self.num_of_nodes)
         
     def add_mst_weight(self, weight):
         self.mst_weight.append(weight)
@@ -43,7 +43,7 @@ class MinimumSpanningTree:
     def get_mst_node_degree(self, nodeID):
         for (node, degree) in self.mst.degree:
             if node == nodeID:
-                return degree
+                return degree / self.num_of_nodes
         
     def check_edge_is_legal(self, node_u, node_v):
         return (not (self.is_added_edge(node_u, node_v) and self.is_added_edge(node_v, node_u))) and (self.is_mst_edge(node_u, node_v) or self.is_mst_edge(node_v, node_u))

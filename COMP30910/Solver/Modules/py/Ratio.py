@@ -16,7 +16,7 @@ class Ratio:
         self.demand_capacity_ratio_node_v.append(ratio)
 
     def calculate_demand_to_capacity(self, node_id):
-        return self.demands[int(node_id)] / self.capacity
+        return self.demands[int(node_id)] / self.capacity / self.num_of_nodes
 
     def add_to_df(self, df):
         df[c.U_NODE_DEMAND_CAPACITY_RATIO] = self.demand_capacity_ratio_node_u

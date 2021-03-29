@@ -19,11 +19,11 @@ class Degree:
         self.num_of_nodes = num_of_nodes
         
     def add_degrees(self, node_u, node_v):
-        # node_u_degree = self.degrees[node_u] / self.num_of_nodes
-        # node_v_degree = self.degrees[node_v] / self.num_of_nodes
+        node_u_degree = self.degrees[node_u] / self.num_of_nodes
+        node_v_degree = self.degrees[node_v] / self.num_of_nodes
 
-        node_u_degree = self.degrees[node_u]
-        node_v_degree = self.degrees[node_v]
+#         node_u_degree = self.degrees[node_u]
+#         node_v_degree = self.degrees[node_v]
 
         self.u_node_degree.append(node_u_degree)
         self.v_node_degree.append(node_v_degree)

@@ -17,7 +17,7 @@ class GlobalEdgeRank:
         self.num_of_nodes = num_of_nodes
         
     def add_ranking(self, edge_weight):
-        self.global_edge_rank.append(self.global_ranking_dict[edge_weight])
+        self.global_edge_rank.append(self.global_ranking_dict[edge_weight] / self.num_of_nodes)
 
     def sort_global_ranks(self, global_ranking_dict):
         return {key: rank for rank, key in enumerate(sorted(set(global_ranking_dict.values()), reverse=True), 1)}

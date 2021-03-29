@@ -81,7 +81,7 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
             coord_str1, coord_str2 = string_edge_builder(
                 u, v), string_edge_builder(v, u)
 
-            edge_weight = calculate_weight(coord_u, coord_v)
+            edge_weight = calculate_weight(coord_u, coord_v) / num_of_nodes
 
             if not compare_coord_id(u, v) and not check_edge_exists(edges_set, coord_str1, coord_str2):
                 edges_set.add(coord_str1)
@@ -95,10 +95,10 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 edges_dict[c.V_NODE_ID].append(v)
 
                 edges_dict[c.FILE_NAME].append(file_name)
-                edges_dict[c.U_NODE_DEMAND].append(demand[int(u)])
-                edges_dict[c.V_NODE_DEMAND].append(demand[int(v)])
-                edges_dict[c.CAPACITY].append(capacity)
-                edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles)
+                edges_dict[c.U_NODE_DEMAND].append(demand[int(u)] / num_of_nodes)
+                edges_dict[c.V_NODE_DEMAND].append(demand[int(v)] / num_of_nodes)
+                edges_dict[c.CAPACITY].append(capacity / num_of_nodes)
+                edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles / num_of_nodes)
 
                 edges_dict[c.EDGE_WEIGHT].append(edge_weight)
                 dict_global_edge_rank[index] = edge_weight
@@ -110,7 +110,7 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                     edges_dict[c.IS_OPTIMAL_EDGE].append(0)
 
                 if is_depot(u, v):
-                    edges_dict[c.IS_DEPOT].append(1)
+                    edges_dict[c.IS_DEPOT].append(1 / num_of_nodes)
                 else:
                     edges_dict[c.IS_DEPOT].append(0)
 
