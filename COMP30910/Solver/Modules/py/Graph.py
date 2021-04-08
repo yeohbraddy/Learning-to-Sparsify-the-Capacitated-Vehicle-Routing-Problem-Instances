@@ -75,6 +75,8 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
     dict_global_edge_rank = {}
     index, row, column = 0, 1, 1
     num_of_nodes = int(num_of_nodes)
+    
+    dbscan = []
 
     for u, coord_u in coords.items():
         for v, coord_v in coords.items():
@@ -85,10 +87,14 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
 
             if not compare_coord_id(u, v) and not check_edge_exists(edges_set, coord_str1, coord_str2):
                 edges_set.add(coord_str1)
+                
+                dbscan.append([coord_u[0], coord_u[1]])
 
                 edges_dict[c.U_X].append(coord_u[0])
                 edges_dict[c.U_Y].append(coord_u[1])
                 edges_dict[c.U_NODE_ID].append(u)
+                
+                dbscan.append([coord_v[0], coord_v[1]])
 
                 edges_dict[c.V_X].append(coord_v[0])
                 edges_dict[c.V_Y].append(coord_v[1])
@@ -119,7 +125,7 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
         column = 0
         row += 1
 
-    return pd.DataFrame(edges_dict), dict_global_edge_rank, incidence_matrix
+    return pd.DataFrame(edges_dict), dict_global_edge_rank, incidence_matrix, dbscan
 
 
 def build_graph(df, is_optimal_edges_only=False):

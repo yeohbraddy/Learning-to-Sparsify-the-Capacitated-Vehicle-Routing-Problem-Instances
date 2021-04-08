@@ -4,7 +4,7 @@
 # In[1]:
 
 
-import Constants as c
+import Constants as c, Quartile as q
 import networkx as nx
 
 
@@ -58,6 +58,27 @@ class MinimumSpanningTree:
         return self.mst.degree
     
     def add_to_df(self, df):
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.node_u_degree, self.num_of_nodes)
+        
+        df[c.MST_U_DEGREE_1ST_QUARTILE] = first_q
+        df[c.MST_U_DEGREE_2ND_QUARTILE] = second_q
+        df[c.MST_U_DEGREE_3RD_QUARTILE] = third_q
+        df[c.MST_U_DEGREE_4TH_QUARTILE] = fourth_q
+        
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.node_v_degree, self.num_of_nodes)
+        
+        df[c.MST_V_DEGREE_1ST_QUARTILE] = first_q
+        df[c.MST_V_DEGREE_2ND_QUARTILE] = second_q
+        df[c.MST_V_DEGREE_3RD_QUARTILE] = third_q
+        df[c.MST_V_DEGREE_4TH_QUARTILE] = fourth_q
+        
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.mst_weight, self.num_of_nodes)
+        
+        df[c.MST_WEIGHT_1ST_QUARTILE] = first_q
+        df[c.MST_WEIGHT_2ND_QUARTILE] = second_q
+        df[c.MST_WEIGHT_3RD_QUARTILE] = third_q
+        df[c.MST_WEIGHT_4TH_QUARTILE] = fourth_q
+        
         df[c.IS_MST_EDGE] = self.mst_edges
         df[c.MST_WEIGHT] = self.mst_weight
         df[c.MST_U_DEGREE] = self.node_u_degree

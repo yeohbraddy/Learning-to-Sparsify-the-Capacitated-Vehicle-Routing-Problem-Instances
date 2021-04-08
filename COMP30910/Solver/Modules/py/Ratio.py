@@ -1,4 +1,4 @@
-import Constants as c
+import Constants as c, Quartile as q
 
 class Ratio:
     def __init__(self, demands, capacity, num_of_nodes):
@@ -19,5 +19,19 @@ class Ratio:
         return self.demands[int(node_id)] / self.capacity / self.num_of_nodes
 
     def add_to_df(self, df):
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.demand_capacity_ratio_node_u, self.num_of_nodes)
+       
+        df[c.DEMAND_CAPACITY_RATIO_NODE_U_1ST_QUARTILE] = first_q
+        df[c.DEMAND_CAPACITY_RATIO_NODE_U_2ND_QUARTILE] = second_q
+        df[c.DEMAND_CAPACITY_RATIO_NODE_U_3RD_QUARTILE] = third_q
+        df[c.DEMAND_CAPACITY_RATIO_NODE_U_4TH_QUARTILE] = fourth_q
+        
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.demand_capacity_ratio_node_v, self.num_of_nodes)
+        
+        df[c.DEMAND_CAPACITY_RATIO_NODE_V_1ST_QUARTILE] = first_q
+        df[c.DEMAND_CAPACITY_RATIO_NODE_V_2ND_QUARTILE] = second_q
+        df[c.DEMAND_CAPACITY_RATIO_NODE_V_3RD_QUARTILE] = third_q
+        df[c.DEMAND_CAPACITY_RATIO_NODE_V_4TH_QUARTILE] = fourth_q
+        
         df[c.U_NODE_DEMAND_CAPACITY_RATIO] = self.demand_capacity_ratio_node_u
         df[c.V_NODE_DEMAND_CAPACITY_RATIO] = self.demand_capacity_ratio_node_v

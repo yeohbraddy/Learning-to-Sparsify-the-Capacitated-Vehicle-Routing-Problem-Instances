@@ -4,7 +4,7 @@
 # In[1]:
 
 
-import Constants as c
+import Constants as c, Quartile as q
 
 
 # In[2]:
@@ -28,6 +28,20 @@ class LocalEdgeRank:
         return sorted_row[node_v] / self.num_of_nodes
     
     def add_to_df(self, df):
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.u_node_local_edge_rank, self.num_of_nodes)
+        
+        df[c.U_NODE_LOCAL_EDGE_RANK_1ST_QUARTILE] = first_q
+        df[c.U_NODE_LOCAL_EDGE_RANK_2ND_QUARTILE] = second_q
+        df[c.U_NODE_LOCAL_EDGE_RANK_3RD_QUARTILE] = third_q
+        df[c.U_NODE_LOCAL_EDGE_RANK_4TH_QUARTILE] = fourth_q
+        
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.v_node_local_edge_rank, self.num_of_nodes)
+        
+        df[c.V_NODE_LOCAL_EDGE_RANK_1ST_QUARTILE] = first_q
+        df[c.V_NODE_LOCAL_EDGE_RANK_2ND_QUARTILE] = second_q
+        df[c.V_NODE_LOCAL_EDGE_RANK_3RD_QUARTILE] = third_q
+        df[c.V_NODE_LOCAL_EDGE_RANK_4TH_QUARTILE] = fourth_q
+        
         df[c.U_NODE_LOCAL_EDGE_RANK] = self.u_node_local_edge_rank
         df[c.V_NODE_LOCAL_EDGE_RANK] = self.v_node_local_edge_rank
         

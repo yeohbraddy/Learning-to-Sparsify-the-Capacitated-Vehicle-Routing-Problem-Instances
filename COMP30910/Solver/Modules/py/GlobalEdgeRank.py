@@ -4,7 +4,7 @@
 # In[1]:
 
 
-import Constants as c
+import Constants as c, Quartile as q
 
 
 # In[2]:
@@ -21,8 +21,16 @@ class GlobalEdgeRank:
 
     def sort_global_ranks(self, global_ranking_dict):
         return {key: rank for rank, key in enumerate(sorted(set(global_ranking_dict.values()), reverse=True), 1)}
-
+    
     def add_to_df(self, df):
+
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.global_edge_rank, self.num_of_nodes)
+        
+        df[c.GLOBAL_EDGE_RANK_1ST_QUARTILE] = first_q
+        df[c.GLOBAL_EDGE_RANK_2ND_QUARTILE] = second_q
+        df[c.GLOBAL_EDGE_RANK_3RD_QUARTILE] = third_q
+        df[c.GLOBAL_EDGE_RANK_4TH_QUARTILE] = fourth_q
+        
         df[c.GLOBAL_RANK] = self.global_edge_rank
     
         return df

@@ -4,7 +4,7 @@
 # In[1]:
 
 
-import Constants as c
+import Constants as c, Quartile as q
 import networkx as nx
 
 
@@ -28,6 +28,21 @@ class Clustering:
         self.average_node_clustering.append((node_u_clustering + node_v_clustering) / 2)
     
     def add_to_df(self, df):
+        
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.u_node_clustering, self.num_of_nodes)
+        
+        df[c.U_NODE_CLUSTERING_1ST_QUARTILE] = first_q
+        df[c.U_NODE_CLUSTERING_2ND_QUARTILE] = second_q
+        df[c.U_NODE_CLUSTERING_3RD_QUARTILE] = third_q
+        df[c.U_NODE_CLUSTERING_4TH_QUARTILE] = fourth_q
+        
+        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.v_node_clustering, self.num_of_nodes)
+        
+        df[c.V_NODE_CLUSTERING_1ST_QUARTILE] = first_q
+        df[c.V_NODE_CLUSTERING_2ND_QUARTILE] = second_q
+        df[c.V_NODE_CLUSTERING_3RD_QUARTILE] = third_q
+        df[c.V_NODE_CLUSTERING_4TH_QUARTILE] = fourth_q
+        
         df[c.U_NODE_CLUSTERING] = self.u_node_clustering
         df[c.V_NODE_CLUSTERING] = self.v_node_clustering
         df[c.AVERAGE_NODE_CLUSTERING] = self.average_node_clustering
