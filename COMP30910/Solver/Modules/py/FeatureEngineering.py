@@ -94,7 +94,8 @@ def generate_features(is_prune):
     s_path = solutions_prune_path if is_prune else solutions_path
     
     for index in range(0, len(instances)):
-        print("Start: ", index)
+        print("{:.2%}".format(index / (len(instances) - 1)))
+
         instance_file = instances[index]
 
         xc, yc, coords, q, Q, p, n, coords_node_id_dict = fp.read_instance(
@@ -148,7 +149,7 @@ def generate_features(is_prune):
             ratio.add_ratios(node_u, node_v)
             RC.add_reduced_cost(node_u, node_v)
             DBS.add_dbscan((u_x, u_y), (v_x, v_y))
-            CH.add_convex_hull_features([u_x, u_y], [v_x, v_y])
+            CH.add_convex_hull_features([u_x, u_y], [v_x, v_y], weight)
         
         for o in objs:
             o.add_to_df(edges_df)
@@ -166,7 +167,6 @@ def generate_features(is_prune):
            
         frames = [df, edges_df]
         df = pd.concat(frames, ignore_index=True)
-        print("End: ", index)
 
 
     # In[8]:

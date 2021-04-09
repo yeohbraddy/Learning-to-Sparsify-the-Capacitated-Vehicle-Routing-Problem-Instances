@@ -1,6 +1,9 @@
-import Constants as c, Quartile as q
+import Constants as c, Quartile as q, Graph as g
 from scipy.spatial import ConvexHull
 import numpy as np
+
+import time
+
 
 class CHull:
     def __init__(self, points, num_of_nodes):
@@ -10,52 +13,70 @@ class CHull:
         self.node_v_euc_distance_to_nearest_convex_hull_vertex = []
         self.convex_hull_edge_length = []
         
-    def calc_euc_distance(self, a, b):
-        return np.linalg.norm(a-b)
+    def calc_euc_distance(self, lst_a, lst_b):
+        a = np.array(lst_a)
+        b = np.array(lst_b)
+        norm = np.linalg.norm(a-b)
+        
+        return norm
     
     def calc_min_distance(self, node0):
-        min_dist = 0
+        min_dist = 100000000
             
         for v in self.hull.vertices:
             node1 = self.hull.points[v]
 
-            dist = self.calc_euc_distance(node0, node1)
+            dist = g.calculate_weight(node0, node1)
             if dist < min_dist:
                 min_dist = dist
                 
         return min_dist
     
     def get_idx_of_ch_vertex(self, node):
-        return np.where(self.hull.points == node)[0]
-        
-    def add_convex_hull_features(self, node_u, node_v):
-        pos = self.get_idx_of_ch_vertex(node_u)
+        arr = np.unique(np.where(self.hull.points == node)[0])
+        for v in self.hull.vertices:
+            start = 0 
+            end = len(arr) - 1
             
+            while start <= end:
+                mid = start + (end - start) // 2
+                idx = arr[mid]
+                
+                if idx < v:
+                    start = mid + 1
+                elif idx > v:
+                    end = mid - 1
+                else:
+                    return idx
+                    break
+                    
+        return -1
+        
+    def add_convex_hull_features(self, node_u, node_v, weight):
+        pos = self.get_idx_of_ch_vertex(node_u)
+
         if pos in self.hull.vertices:
-            node_u_euc_distance_to_nearest_convex_hull_vertex.append(0)
-        else:
             min_dist = self.calc_min_distance(node_u)
                 
             self.node_u_euc_distance_to_nearest_convex_hull_vertex.append(min_dist / self.num_of_nodes)
-       
-        pos = self.get_idx_of_ch_vertex(node_u)
+        else:
+            self.node_u_euc_distance_to_nearest_convex_hull_vertex.append(0)
+   
+
+        pos = self.get_idx_of_ch_vertex(node_v)
             
         if pos in self.hull.vertices:
-            node_v_euc_distance_to_nearest_convex_hull_vertex.append(0)
-        else:
             min_dist = self.calc_min_distance(node_v)
                 
             self.node_v_euc_distance_to_nearest_convex_hull_vertex.append(min_dist / self.num_of_nodes)
+        else:
+            self.node_v_euc_distance_to_nearest_convex_hull_vertex.append(0)
         
         pos0 = self.get_idx_of_ch_vertex(node_u)
         pos1 = self.get_idx_of_ch_vertex(node_v)
            
         if pos0 in self.hull.vertices and pos1 in self.hull.vertices:
-            for idx in range(0, len(self.hull.vertices) - 1):
-                if self.hull.vertices[idx] == pos0 and self.hull.vertices[idx + 1] == pos1:
-                    dist = self.calc_euc_distance(node_u[0], node_u[1], node_v[0], node_v[1])
-                    self.convex_hull_edge_length.append(dist / self.num_of_nodes)
-                    break
+            self.convex_hull_edge_length.append(weight)
         else:
             self.convex_hull_edge_length.append(0)
 
