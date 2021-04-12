@@ -1,4 +1,4 @@
-import os
+import os, time
 
 
 def create_solution_file(arcs, cost, file_name):
@@ -33,23 +33,28 @@ def build_routes(arcs):
 def to_string(routes, cost):
     text = ""
     for k in routes:
-        text += "Route #" + str(k + 1) + ": "
+        text += "Route #" + str(k + 1) + ": 1 "
         for node in routes[k]:
-            text += node + " "
-        text += "\n"
+            num = int(node) + 1
+            text += str(num) + " "
+        text += "1\n"
     text += "Cost " + cost
 
     return text
 
 
 def write_to_file(text, file_name):
-    path = os.getcwd() + "\COMP30910\Solver\Instances\Solutions - Engineered/"
+#     path = os.getcwd() + "/Instances/Instances - Prune/"
+#     path = os.getcwd() + "\COMP30910\Solver\Instances\Solutions - Engineered/"
+    path = os.getcwd() + "/Instances/Solutions - Engineered/"
     f = open(path + file_name, "w")
     f.write(text)
     f.close()
 
 
 def find_route(node_u, arcs, route):
+#     print("node_u: ", node_u)
+#     print("arcs: ", arcs)
     while node_u != 0:
         start = 0
         end = len(arcs) - 1
@@ -57,6 +62,7 @@ def find_route(node_u, arcs, route):
         while start <= end:
             middle = start + (end - start) // 2
             mid = arcs[middle][0]
+#             print(start, end, mid)
             if mid < node_u:
                 start = middle + 1
             elif mid > node_u:
@@ -64,5 +70,7 @@ def find_route(node_u, arcs, route):
             else:
                 node_u = arcs[middle][1]
                 route = route + [str(node_u)]
+#                 print("route: ", route)
+#                 time.sleep(20)
                 break
     return route

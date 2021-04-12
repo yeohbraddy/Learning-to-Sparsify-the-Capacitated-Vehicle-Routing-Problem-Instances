@@ -23,14 +23,15 @@ from pathlib import Path
 
 
 def solve(is_pruned):
-    path = os.getcwd() + "\COMP30910\Solver\Instances\Instances - Prune/"
+    path = os.getcwd() + "/Instances/Instances - Prune/"
     instances = fp.get_instances(path)
 
     for instance in instances:
         print("INSTANCE: ", instance)
-        path += instance
+        temp = path
+        temp += instance
         lp_relaxation, reduced_cost, active_arcs, cost = solver.solve(
-            path, is_pruned=is_pruned)
-        file_name = instance[:len(instance) - 4] + "-solution.txt"
-        pf.create_solution_file(active_arcs, cost, file_name)
+            temp, instance, is_pruned=is_pruned)
+#         file_name = instance[:len(instance) - 4] + "-solution.txt"
+#         pf.create_solution_file(active_arcs, cost, file_name)
         print()

@@ -6,9 +6,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from gurobipy import Model, GRB, quicksum
 import pandas as pd
+import PathFinder as pf
 
 
-def solve(file_name, is_binary=True, enable_logging=True, is_pruned=False):
+def solve(file_name, instance, is_binary=True, enable_logging=True, is_pruned=False):
     xc, yc, coords, q, Q, p, n, coords_node_id_dict = fp.read_instance(
         file_name)
 
@@ -23,7 +24,7 @@ def solve(file_name, is_binary=True, enable_logging=True, is_pruned=False):
     V = [0] + N
 
     # Arcs
-    A = populate_arcs(df) if is_pruned else [(i, j) for i in V for j in V]
+    A = populate_arcs(df) if is_pruned else [(i, j) for i in V for j in V if i != j]
 
     # Cost
     c = {(i, j): np.hypot(xc[i] - xc[j], yc[i] - yc[j]) for i, j in A}
@@ -64,9 +65,9 @@ def solve(file_name, is_binary=True, enable_logging=True, is_pruned=False):
     mdl.addConstrs(u[i] <= Q for i in N)
     mdl.update()
 
-    mdl.Params.MIPGap = 0
+#     mdl.Params.MIPGap = 0
     mdl.Params.PoolSearchMode = 2
-    mdl.Params.PoolGap = 0
+    mdl.Params.PoolGap = 0.5
 
     mdl.optimize()
 
@@ -90,12 +91,15 @@ def solve(file_name, is_binary=True, enable_logging=True, is_pruned=False):
             active_arcs = []
             mdl.setParam(GRB.Param.SolutionNumber, sol)
             values = mdl.Xn
+            sol_file_name = ""
 
             for a in A:
                 if values[index] > 0.99:
                     active_arcs.append(a)
                 index += 1
-            plot_solution(active_arcs, xc, yc)
+            
+            sol_file_name = instance[:len(instance) - 4] + "-" + str(sol) + "-solution.txt"
+            pf.create_solution_file(active_arcs, str(round(mdl.getObjective().getValue())), sol_file_name)
     return lp_relaxation, reduced_cost, active_arcs, str(round(mdl.getObjective().getValue()))
 
 
