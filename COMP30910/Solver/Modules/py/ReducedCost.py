@@ -11,7 +11,10 @@ class ReducedCost:
         self.reduced_cost.append(num / self.num_of_nodes)
 
     def add_to_df(self, df):
-        first_q, second_q, third_q, fourth_q = q.calc_quartiles(self.reduced_cost, self.num_of_nodes)
+        quartile = q.Quartile(self.reduced_cost)
+        
+        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()  
+        
         
         df[c.REDUCED_COST_1ST_QUARTILE] = first_q
         df[c.REDUCED_COST_2ND_QUARTILE] = second_q
