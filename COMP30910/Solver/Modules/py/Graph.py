@@ -31,7 +31,8 @@ def create_edge_strings(u, v):
 
 
 def calculate_weight(coord_u, coord_v):
-    return np.hypot(int(coord_u[0]) - int(coord_v[0]), int(coord_u[1]) - int(coord_v[1]))
+#     return np.hypot(int(coord_u[0]) - int(coord_v[0]), int(coord_u[1]) - int(coord_v[1]))
+    return np.linalg.norm(coord_u - coord_v)
 
 
 def is_depot(u, v):
@@ -84,16 +85,16 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 u, v), string_edge_builder(v, u)
 
             edge_weight = calculate_weight(coord_u, coord_v) / num_of_nodes
-
-            if not compare_coord_id(u, v) and not check_edge_exists(edges_set, coord_str1, coord_str2):
+# and not check_edge_exists(edges_set, coord_str1, coord_str2)
+            if not compare_coord_id(u, v):
                 edges_set.add(coord_str1)
-                
+
                 dbscan.append([coord_u[0], coord_u[1]])
 
                 edges_dict[c.U_X].append(coord_u[0])
                 edges_dict[c.U_Y].append(coord_u[1])
                 edges_dict[c.U_NODE_ID].append(u)
-                
+
                 dbscan.append([coord_v[0], coord_v[1]])
 
                 edges_dict[c.V_X].append(coord_v[0])
@@ -107,6 +108,7 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles / num_of_nodes)
 
                 edges_dict[c.EDGE_WEIGHT].append(edge_weight)
+                edges_dict[c.EDGE_WEIGHT_NON_NORMALISED].append(edge_weight * num_of_nodes)
                 dict_global_edge_rank[index] = edge_weight
                 index += 1
 
@@ -116,7 +118,7 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                     edges_dict[c.IS_OPTIMAL_EDGE].append(0)
 
                 if is_depot(u, v):
-                    edges_dict[c.IS_DEPOT].append(1 / num_of_nodes)
+                    edges_dict[c.IS_DEPOT].append(1)
                 else:
                     edges_dict[c.IS_DEPOT].append(0)
 
@@ -135,9 +137,9 @@ def build_graph(df, is_optimal_edges_only=False):
         graph = df[[c.U_NODE_ID, c.V_NODE_ID]].where(
             df[c.IS_OPTIMAL_EDGE] == 1)
     else:
-        graph = df[[c.U_NODE_ID, c.V_NODE_ID]]
+        graph = df[[c.U_NODE_ID, c.V_NODE_ID, c.EDGE_WEIGHT_NON_NORMALISED]]
 
-    G = nx.from_pandas_edgelist(graph, c.U_NODE_ID, c.V_NODE_ID)
+    G = nx.from_pandas_edgelist(graph, c.U_NODE_ID, c.V_NODE_ID, edge_attr=c.EDGE_WEIGHT_NON_NORMALISED)
 
     return G
 
