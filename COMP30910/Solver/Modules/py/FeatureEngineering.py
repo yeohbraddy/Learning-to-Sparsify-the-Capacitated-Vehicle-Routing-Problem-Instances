@@ -32,6 +32,8 @@ import Constants as c
 import Clustering as cg
 import DBScan as dbs
 import ConvexHull as ch
+import Centrality as cty
+import Distance as distance
 
 from gurobipy import Model, GRB, quicksum
 import pandas as pd
@@ -64,6 +66,7 @@ instances_path = base_path + "/Instances/"
 solutions_path = base_path + "/Solutions/"
 instances_prune_path = base_path + "/Instances - Prune/"
 solutions_prune_path = base_path + "/Solutions - Prune/"
+solutions_engineered_path = base_path + "/Solutions - Engineered/"
 
 instances_files = [f for f in listdir(
     instances_path) if isfile(join(instances_path, f))]
@@ -73,6 +76,8 @@ instances_prune_files = [f for f in listdir(
     instances_prune_path) if isfile(join(instances_prune_path, f))]
 solutions_prune_files = [f for f in listdir(
     solutions_prune_path) if isfile(join(solutions_prune_path, f))]
+engineered_solutions_files = [f for f in listdir(
+    solutions_engineered_path) if isfile(join(solutions_engineered_path, f))]
 
 
 # ### Q = capacity
@@ -89,49 +94,62 @@ def generate_features(is_prune):
 
     instances = instances_prune_files if is_prune else instances_files
     solutions = solutions_prune_files if is_prune else solutions_files
+    engineered = engineered_solutions_files
     
     i_path = instances_prune_path if is_prune else instances_path
     s_path = solutions_prune_path if is_prune else solutions_path
+    e_path = solutions_engineered_path
     
     for index in range(0, len(instances)):
-        print("{:.2%}".format(index / (len(instances) - 1)))
-
         instance_file = instances[index]
 
         xc, yc, coords, q, Q, p, n, coords_node_id_dict = fp.read_instance(
             i_path + instance_file)
+        
+        n += 1
+        
+        edges_in_optimal_route = set()
+        
+        for idx in range(0, len(engineered)):
+            engineered_solution = engineered[idx] 
+            temp0 = instance_file[:len(instance_file) - 4] + "-" + str(idx) + "-solution.txt"
+            temp1 = instance_file[:len(instance_file) - 4] + "-solution.txt"
+            
+            if temp0 == engineered_solution or temp1 == engineered_solution:
+                routes = fp.read_solution(e_path + engineered_solution)
 
-        routes = fp.read_solution(s_path + solutions[index])
-
+                optimal_edge = g.get_edges_in_optimal_route(routes)
+                
+                edges_in_optimal_route = edges_in_optimal_route | optimal_edge
+                
+            
         lp_relaxation, reduced_cost, active_arcs, objective_value = solver.solve(
-            i_path + instance_file, False, False)
+            i_path + instance_file, "", is_binary=False, enable_logging=False, is_pruned=False)
 
         edges_df, dict_global_edge_rank, incidence_matrix, dbscan = g.create_edges_df(
-            coords, routes, instance_file, q, Q, p, n)
+            coords, edges_in_optimal_route, instance_file, q, Q, p, n)
+
+        edges_in_optimal_route = edges_in_optimal_route
 
         DBS = dbs.DBScan(dbscan, n)
         G = g.build_graph(edges_df)
-        degree = d.Degree(G, n)
-        clustering = cg.Clustering(G, n)
         globalEdgeRank = ger.GlobalEdgeRank(dict_global_edge_rank, n)
         localEdgeRank = ler.LocalEdgeRank(incidence_matrix, n)
-        MST = mst.MinimumSpanningTree(G, n)
         LPR = lpr.LPRelaxation(lp_relaxation, n)
         ratio = r.Ratio(q, Q, n)
         RC = rc.ReducedCost(reduced_cost, n)
         CH = ch.CHull(dbscan, n)
-        
+        D = distance.Distance(coords, n)
+
         objs = [
             DBS, 
-            degree, 
-            clustering,
             globalEdgeRank,
             localEdgeRank,
-            MST,
             LPR,
             ratio,
             RC,
-            CH
+            CH,
+            D
        ]
 
         for index, row in edges_df.iterrows():
@@ -140,31 +158,19 @@ def generate_features(is_prune):
             u_x, u_y = row[c.U_X], row[c.U_Y]
             v_x, v_y = row[c.V_X], row[c.V_Y]
 
-            degree.add_degrees(node_u, node_v)
-            clustering.add_clusterings(node_u, node_v)
             globalEdgeRank.add_ranking(weight)
             localEdgeRank.add_rankings(node_u, node_v)
-            MST.add_mst_features(node_u, node_v, weight)
             LPR.add_relaxation(node_u, node_v)
             ratio.add_ratios(node_u, node_v)
             RC.add_reduced_cost(node_u, node_v)
             DBS.add_dbscan((u_x, u_y), (v_x, v_y))
             CH.add_convex_hull_features([u_x, u_y], [v_x, v_y], weight)
-        
+            D.add_distance_features([u_x, u_y], [v_x, v_y])
+
         for o in objs:
             o.add_to_df(edges_df)
-#         degree.add_to_df(edges_df)
-#         clustering.add_to_df(edges_df)
-#         localEdgeRank.add_to_df(edges_df)
-#         globalEdgeRank.add_to_df(edges_df)
-#         MST.add_to_df(edges_df)
-#         LPR.add_to_df(edges_df)
-#         ratio.add_to_df(edges_df)
-#         RC.add_to_df(edges_df)
-#         DBS.add_to_df(edges_df)
-#         CH.add_to_df(edges_df)
-        
-           
+
+
         frames = [df, edges_df]
         df = pd.concat(frames, ignore_index=True)
 
