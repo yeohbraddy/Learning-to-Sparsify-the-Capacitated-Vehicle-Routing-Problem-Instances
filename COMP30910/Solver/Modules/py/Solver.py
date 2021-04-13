@@ -13,7 +13,7 @@ def solve(file_name, instance, is_binary=True, enable_logging=True, is_pruned=Fa
     xc, yc, coords, q, Q, p, n, coords_node_id_dict = fp.read_instance(
         file_name)
 
-    path = os.getcwd() + "\COMP30910\Solver\Data/"
+    path = os.getcwd() + "/Data/"
     df = pd.read_csv(path + 'data_pruned.csv',
                      index_col=0) if is_pruned else pd.DataFrame()
 
@@ -85,7 +85,7 @@ def solve(file_name, instance, is_binary=True, enable_logging=True, is_pruned=Fa
         else:
             non_active_arcs.append(a)
 
-    if is_binary:
+    if is_binary and not is_pruned:
         for sol in range(mdl.SolCount):
             index = 0
             active_arcs = []
