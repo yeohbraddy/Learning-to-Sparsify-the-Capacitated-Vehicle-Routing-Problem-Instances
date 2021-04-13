@@ -10,7 +10,6 @@ import matplotlib as plt
 import networkx as nx
 from collections import defaultdict
 
-
 # In[7]:
 
 
@@ -32,12 +31,13 @@ def create_edge_strings(u, v):
 
 def calculate_weight(coord_u, coord_v):
 #     return np.hypot(int(coord_u[0]) - int(coord_v[0]), int(coord_u[1]) - int(coord_v[1]))
-    return np.linalg.norm(coord_u - coord_v)
+    a = np.array(coord_u)
+    b = np.array(coord_v)
+    return np.linalg.norm(a - b)
 
 
-def is_depot(u, v):
-    return u == "1" or v == "1"
-
+def is_depot(node):
+    return node == "1"
 
 def get_edges_in_optimal_route(routes):
     edges_in_optimal_route = set()
@@ -54,6 +54,21 @@ def get_edges_in_optimal_route(routes):
     return edges_in_optimal_route
 
 
+# def get_edges_in_optimal_route(edges_in_optimal_route, routes):
+# #     edges_in_optimal_route = set()
+
+#     for route in routes:
+#         curr = routes[route]
+
+#         for index in range(0, len(curr) - 1):
+#             coord_str1, coord_str2 = create_edge_strings(
+#                 curr[index], curr[index + 1])
+
+#             if not check_edge_exists(edges_in_optimal_route, coord_str1, coord_str2):
+#                 edges_in_optimal_route.add(coord_str1)
+#     return edges_in_optimal_route
+
+
 def init_incident_matrix(coords, matrix_size):
     arr = np.zeros((matrix_size, matrix_size))
     return label_matrix(coords, arr)
@@ -68,8 +83,7 @@ def label_matrix(coords, arr):
     return incidence_matrix
 
 
-def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles, num_of_nodes):
-    edges_in_optimal_route = get_edges_in_optimal_route(routes)
+def create_edges_df(coords, edges_in_optimal_route, file_name, demand, capacity, num_of_vehicles, num_of_nodes):
     incidence_matrix = init_incident_matrix(coords, len(coords))
     edges_dict = defaultdict(list)
     edges_set = set()
@@ -85,8 +99,8 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 u, v), string_edge_builder(v, u)
 
             edge_weight = calculate_weight(coord_u, coord_v) / num_of_nodes
-# and not check_edge_exists(edges_set, coord_str1, coord_str2)
-            if not compare_coord_id(u, v):
+            
+            if not compare_coord_id(u, v) and not check_edge_exists(edges_set, coord_str1, coord_str2):
                 edges_set.add(coord_str1)
 
                 dbscan.append([coord_u[0], coord_u[1]])
@@ -104,8 +118,8 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 edges_dict[c.FILE_NAME].append(file_name)
                 edges_dict[c.U_NODE_DEMAND].append(demand[int(u)] / num_of_nodes)
                 edges_dict[c.V_NODE_DEMAND].append(demand[int(v)] / num_of_nodes)
-                edges_dict[c.CAPACITY].append(capacity / num_of_nodes)
-                edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles / num_of_nodes)
+#                 edges_dict[c.CAPACITY].append(capacity / num_of_nodes)
+#                 edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles / num_of_nodes)
 
                 edges_dict[c.EDGE_WEIGHT].append(edge_weight)
                 edges_dict[c.EDGE_WEIGHT_NON_NORMALISED].append(edge_weight * num_of_nodes)
@@ -117,16 +131,20 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 else:
                     edges_dict[c.IS_OPTIMAL_EDGE].append(0)
 
-                if is_depot(u, v):
-                    edges_dict[c.IS_DEPOT].append(1)
+                if is_depot(u):
+                    edges_dict[c.IS_NODE_U_DEPOT].append(1)
+                    edges_dict[c.IS_NODE_V_DEPOT].append(0)
+                elif is_depot(v):
+                    edges_dict[c.IS_NODE_U_DEPOT].append(0)
+                    edges_dict[c.IS_NODE_V_DEPOT].append(1)
                 else:
-                    edges_dict[c.IS_DEPOT].append(0)
-
+                    edges_dict[c.IS_NODE_U_DEPOT].append(0)
+                    edges_dict[c.IS_NODE_V_DEPOT].append(0)
             incidence_matrix[str(row)][str(column)] = edge_weight
             column += 1
         column = 0
         row += 1
-
+        
     return pd.DataFrame(edges_dict), dict_global_edge_rank, incidence_matrix, dbscan
 
 

@@ -80,36 +80,7 @@ class CHull:
         else:
             self.convex_hull_edge_length.append(0)
 
-    def add_to_df(self, df):
-        quartile = q.Quartile(self.node_u_euc_distance_to_nearest_convex_hull_vertex)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()        
-        
-        df[c.NODE_U_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_1ST_QUARTILE] = first_q
-        df[c.NODE_U_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_2ND_QUARTILE] = second_q
-        df[c.NODE_U_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_3RD_QUARTILE] = third_q
-        df[c.NODE_U_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_4TH_QUARTILE] = fourth_q
-
-        
-        quartile = q.Quartile(self.node_v_euc_distance_to_nearest_convex_hull_vertex)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()
-        
-        df[c.NODE_V_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_1ST_QUARTILE] = first_q
-        df[c.NODE_V_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_2ND_QUARTILE] = second_q
-        df[c.NODE_V_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_3RD_QUARTILE] = third_q
-        df[c.NODE_V_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX_4TH_QUARTILE] = fourth_q
-
-        
-        quartile = q.Quartile(self.convex_hull_edge_length)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()
-        
-        df[c.CONVEX_HULL_EDGE_LENGTH_1ST_QUARTILE] = first_q
-        df[c.CONVEX_HULL_EDGE_LENGTH_2ND_QUARTILE] = second_q
-        df[c.CONVEX_HULL_EDGE_LENGTH_3RD_QUARTILE] = third_q
-        df[c.CONVEX_HULL_EDGE_LENGTH_4TH_QUARTILE] = fourth_q
-        
+    def add_to_df(self, df):       
         df[c.NODE_U_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX] = self.node_u_euc_distance_to_nearest_convex_hull_vertex
         df[c.NODE_V_EUC_DISTANCE_TO_NEAREST_CONVEX_HULL_VERTEX] = self.node_v_euc_distance_to_nearest_convex_hull_vertex
         df[c.CONVEX_HULL_EDGE_LENGTH] = self.convex_hull_edge_length

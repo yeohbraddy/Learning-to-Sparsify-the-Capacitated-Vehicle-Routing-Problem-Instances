@@ -34,26 +34,6 @@ class DBScan:
         self.average_node_dbscan.append((u_node_dbscan + v_node_dbscan) / 2)
     
     def add_to_df(self, df):
-
-        quartile = q.Quartile(self.u_node_dbscan)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()
-        
-        df[c.U_NODE_DBSCAN_1ST_QUARTILE] = first_q
-        df[c.U_NODE_DBSCAN_2ND_QUARTILE] = second_q
-        df[c.U_NODE_DBSCAN_3RD_QUARTILE] = third_q
-        df[c.U_NODE_DBSCAN_4TH_QUARTILE] = fourth_q
-        
-        
-        quartile = q.Quartile(self.v_node_dbscan)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()
-        
-        df[c.V_NODE_DBSCAN_1ST_QUARTILE] = first_q
-        df[c.V_NODE_DBSCAN_2ND_QUARTILE] = second_q
-        df[c.V_NODE_DBSCAN_3RD_QUARTILE] = third_q
-        df[c.V_NODE_DBSCAN_4TH_QUARTILE] = fourth_q
-        
         df[c.U_NODE_DBSCAN] = self.u_node_dbscan
         df[c.V_NODE_DBSCAN] = self.v_node_dbscan
         df[c.AVERAGE_NODE_DBSCAN] = self.average_node_dbscan

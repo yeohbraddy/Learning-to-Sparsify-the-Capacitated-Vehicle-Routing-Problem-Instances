@@ -10,15 +10,5 @@ class LPRelaxation:
         num = self.lp_relaxation_dict[(int(node_u) - 1, int(node_v) - 1)]
         self.relaxation.append(num / self.num_of_nodes)
     
-    def add_to_df(self, df):
- 
-        quartile = q.Quartile(self.relaxation)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()   
-        
-        df[c.LP_RELAXATION_1ST_QUARTILE] = first_q
-        df[c.LP_RELAXATION_2ND_QUARTILE] = second_q
-        df[c.LP_RELAXATION_3RD_QUARTILE] = third_q
-        df[c.LP_RELAXATION_4TH_QUARTILE] = fourth_q
-        
+    def add_to_df(self, df):        
         df[c.LP_RELAXATION] = self.relaxation

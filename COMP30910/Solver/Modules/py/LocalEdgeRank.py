@@ -27,26 +27,7 @@ class LocalEdgeRank:
         
         return sorted_row[node_v]
     
-    def add_to_df(self, df):
-        quartile = q.Quartile(self.u_node_local_edge_rank)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()   
-
-        df[c.U_NODE_LOCAL_EDGE_RANK_1ST_QUARTILE] = first_q
-        df[c.U_NODE_LOCAL_EDGE_RANK_2ND_QUARTILE] = second_q
-        df[c.U_NODE_LOCAL_EDGE_RANK_3RD_QUARTILE] = third_q
-        df[c.U_NODE_LOCAL_EDGE_RANK_4TH_QUARTILE] = fourth_q
-  
-
-        quartile = q.Quartile(self.v_node_local_edge_rank)
-        
-        first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()   
-        
-        df[c.V_NODE_LOCAL_EDGE_RANK_1ST_QUARTILE] = first_q
-        df[c.V_NODE_LOCAL_EDGE_RANK_2ND_QUARTILE] = second_q
-        df[c.V_NODE_LOCAL_EDGE_RANK_3RD_QUARTILE] = third_q
-        df[c.V_NODE_LOCAL_EDGE_RANK_4TH_QUARTILE] = fourth_q
-        
+    def add_to_df(self, df):      
         df[c.U_NODE_LOCAL_EDGE_RANK] = self.u_node_local_edge_rank
         df[c.V_NODE_LOCAL_EDGE_RANK] = self.v_node_local_edge_rank
         
