@@ -1,13 +1,17 @@
 import Constants as c
 import networkx as nx
 
+# Centrality class to calculate centrality features
+
 class Centrality:
     def __init__(self, G, num_of_nodes):
+        # Creates a dictionary we can query the key using a node ID
         self.closeness_centrality = nx.closeness_centrality(G, distance=c.EDGE_WEIGHT_NON_NORMALISED)
         self.num_of_nodes = num_of_nodes
         self.node_u_closeness_centrality = []
         self.node_v_closeness_centrality = []
         self.node_average_closeness_centrality = []
+        # Creates a dictionary we can query the key using a node ID
         self.current_flow_betweenness_centrality = nx.current_flow_betweenness_centrality(G, weight=c.EDGE_WEIGHT_NON_NORMALISED)
         self.node_u_current_flow_betweenness_centrality = []
         self.node_v_current_flow_betweenness_centrality = []
@@ -41,7 +45,7 @@ class Centrality:
             
         self.edge_current_flow_betweenness_centrality.append(num / self.num_of_nodes)
      
-        
+    
     def add_to_df(self, df):
         df[c.NODE_U_CLOSENESS_CENTRALITY] = self.node_u_closeness_centrality
         df[c.NODE_V_CLOSENESS_CENTRALITY] = self.node_v_closeness_centrality

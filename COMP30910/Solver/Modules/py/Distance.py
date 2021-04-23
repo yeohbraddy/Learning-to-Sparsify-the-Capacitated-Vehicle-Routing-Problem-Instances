@@ -1,10 +1,15 @@
 import Constants as c, Graph as g
 import numpy as np
 
+# Distance class to calculate distance features 
+
+
 class Distance:
     def __init__(self, coords, num_of_nodes):
+        # A dictionary where it is keyed by the node ID 
         self.coords = coords
         self.num_of_nodes = num_of_nodes
+        # A list containing coordinate of the centroid
         self.centroid = self.calculate_centroid()
         self.node_u_dist_to_centroid = []
         self.node_v_dist_to_centroid = []
@@ -63,7 +68,10 @@ class Distance:
             for e1, e2 in ((A, -B), (B, -C), (C, -A)):
                 num = np.dot(e1, e2)
                 denom = np.linalg.norm(e1) * np.linalg.norm(e2)
-                angles.append(np.arccos(round(num/denom, 5)) * 180 / np.pi)
+                if num == 0:
+                    angles.append(0)
+                else:
+                    angles.append((np.arccos(round(num/denom, 6)) * 180) / np.pi)
                 
 
             self.angle_degree_to_depot.append(angles[0])

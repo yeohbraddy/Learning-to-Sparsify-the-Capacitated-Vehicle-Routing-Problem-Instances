@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
+# MinimumSpanningTree class to calculate minimum spanning tree features
 
 import Constants as c, Quartile as q
 import networkx as nx
-
-
-# In[2]:
-
 
 class MinimumSpanningTree:
     def __init__(self, G, num_of_nodes):
@@ -59,6 +54,7 @@ class MinimumSpanningTree:
     
     def add_to_df(self, df):
         
+        # Calculating quartiles
         quartile = q.Quartile(self.node_u_degree)
         
         first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()   
@@ -68,7 +64,7 @@ class MinimumSpanningTree:
         df[c.MST_U_DEGREE_3RD_QUARTILE] = third_q
         df[c.MST_U_DEGREE_4TH_QUARTILE] = fourth_q
   
-
+        # Calculating quartiles
         quartile = q.Quartile(self.node_v_degree)
         
         first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()  
@@ -78,7 +74,7 @@ class MinimumSpanningTree:
         df[c.MST_V_DEGREE_3RD_QUARTILE] = third_q
         df[c.MST_V_DEGREE_4TH_QUARTILE] = fourth_q
         
-        
+        # Calculating quartiles
         quartile = q.Quartile(self.mst_weight)
         
         first_q, second_q, third_q, fourth_q = quartile.calc_quartiles()  

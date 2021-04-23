@@ -1,5 +1,7 @@
-import os, time
+import os
 
+# Functions to create multiple solutions. This is not used as we verified there are no multiple unique solutions.
+# These functions were used to verify. In the future, if there are multiple solutions, these functions may be used.
 
 def create_solution_file(arcs, cost, file_name):
     print("Building routes..")
@@ -11,7 +13,7 @@ def create_solution_file(arcs, cost, file_name):
     print("Writing string to file..")
     write_to_file(text, file_name)
 
-
+# Path finding algorithm to find the set of routes given a list of edges
 def build_routes(arcs):
     num_of_edges_from_origin = 0
     for a in arcs:
@@ -44,17 +46,13 @@ def to_string(routes, cost):
 
 
 def write_to_file(text, file_name):
-#     path = os.getcwd() + "/Instances/Instances - Prune/"
-#     path = os.getcwd() + "\COMP30910\Solver\Instances\Solutions - Engineered/"
     path = os.getcwd() + "/Instances/Solutions - Engineered/"
     f = open(path + file_name, "w")
     f.write(text)
     f.close()
 
-
+# Perform a binary search on the arcs to build a route
 def find_route(node_u, arcs, route):
-#     print("node_u: ", node_u)
-#     print("arcs: ", arcs)
     while node_u != 0:
         start = 0
         end = len(arcs) - 1
@@ -62,7 +60,6 @@ def find_route(node_u, arcs, route):
         while start <= end:
             middle = start + (end - start) // 2
             mid = arcs[middle][0]
-#             print(start, end, mid)
             if mid < node_u:
                 start = middle + 1
             elif mid > node_u:
@@ -70,7 +67,5 @@ def find_route(node_u, arcs, route):
             else:
                 node_u = arcs[middle][1]
                 route = route + [str(node_u)]
-#                 print("route: ", route)
-#                 time.sleep(20)
                 break
     return route

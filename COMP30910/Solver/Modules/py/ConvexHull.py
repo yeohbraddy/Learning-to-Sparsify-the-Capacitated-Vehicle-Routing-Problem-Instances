@@ -2,8 +2,7 @@ import Constants as c, Quartile as q, Graph as g
 from scipy.spatial import ConvexHull
 import numpy as np
 
-import time
-
+# ConvexHull class to calculate ConvexHull features
 
 class CHull:
     def __init__(self, points, num_of_nodes):
@@ -53,6 +52,9 @@ class CHull:
         return -1
         
     def add_convex_hull_features(self, node_u, node_v, weight):
+        # vertices of the convex hull are stored as indices of the stored points. The points are stored as coordinates.
+        # we perform a binary search to find the index of the node we are interested in, and check if that index exists
+        # in the list of indices
         pos = self.get_idx_of_ch_vertex(node_u)
 
         if pos in self.hull.vertices:

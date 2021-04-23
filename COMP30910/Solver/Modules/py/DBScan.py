@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
+# DBScan class to calculate DBScan features
 
 from sklearn.cluster import DBSCAN
 import Constants as c, Quartile as q
 
-
-# In[2]:
-
-
 class DBScan:
     def __init__(self, dbscan, num_of_nodes):
+        # List of node coordinates, e.g, l1 = [(1, 2), ..., (2, 3)] where l1[0] = x = 1, y = 2
         self.dbscan = dbscan
         self.u_node_dbscan = []
         self.v_node_dbscan = []
@@ -40,8 +36,6 @@ class DBScan:
         
         return df
 
-
-# In[ ]:
 
 
 

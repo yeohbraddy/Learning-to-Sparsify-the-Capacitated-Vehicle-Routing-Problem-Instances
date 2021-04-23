@@ -1,11 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# Entrypoint for the two index formulation solver
-
 import FileParser as fp
 import PathFinder as pf
-import TwoIndexSolver as solver
+import SetSolver as set_solver
 import re
 import os
 import sys
@@ -13,6 +8,7 @@ from linecache import getline
 from gurobipy import Model, GRB, quicksum
 from pathlib import Path
 
+# Entrypoint for the set based formulation solver
 
 def solve(is_pruned):
     path = os.getcwd() + "/Instances/Instances - Prune/"
@@ -22,6 +18,5 @@ def solve(is_pruned):
         print("INSTANCE: ", instance)
         temp = path
         temp += instance
-        lp_relaxation, reduced_cost, active_arcs, cost = solver.solve(
-            temp, instance, is_pruned=is_pruned)
+        set_solver.solve(temp, instance, is_pruned)
         print()

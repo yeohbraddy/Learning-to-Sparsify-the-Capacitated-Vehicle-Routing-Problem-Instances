@@ -1,5 +1,7 @@
 import Constants as c, Quartile as q
 
+# LPRelaxation class to calculate linear relaxation features
+
 class LPRelaxation:
     def __init__(self, lp_relaxation_dict, num_of_nodes):
         self.lp_relaxation_dict = lp_relaxation_dict

@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
+# LocalEdgeRank class to calculate local edge rank features
 
 import Constants as c, Quartile as q
 
-
-# In[2]:
-
-
 class LocalEdgeRank:
     def __init__(self, incidence_matrix, num_of_nodes):
+        # Distance matrix
         self.incidence_matrix = incidence_matrix
         self.u_node_local_edge_rank = []
         self.v_node_local_edge_rank = []

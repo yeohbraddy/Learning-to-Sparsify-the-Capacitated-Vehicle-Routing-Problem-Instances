@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# To parse the instance files
 
 import re
 from os import listdir
@@ -28,7 +28,8 @@ def parse_demand(line):
 
 def parse_routes(line):
     x = line.split()
-    routes = x[2:]
+    # Solution file indicates customer 2 as node ID 1, so we need to increase it as depot ID is 1
+    routes = [str(int(node) + 1) for node in x[2:]]
     routes.insert(0, "1")
 
     return routes
@@ -67,9 +68,15 @@ def read_instance(file):
 
     return xc, yc, coords, q, Q, p, n, coords_node_id_dict
 
-
+# For any particular route in the solution file, the format is given by:
+# Route #num: 2 5 8 9 10
+# where #num indicates the route number and the series of numbers that follow it are the IDs of the customer nodes.
+# We know an ID of 1 is the depot, so the true route is 1 -> 2 -> 5 -> 8 -> 9 -> 10
+# We need to convert each route in the solution file to its true route representation so we can extract edges for
+# feature engineering, e.g, e0 = (1, 2), e1 = (2, 5), etc.
+# This difference in format is due to the convention defined in literature.
 def read_solution(file):
-    fh = open(file, 'r')  # A-n32-k5-solution.txt
+    fh = open(file, 'r')
     routes = {}
     for i, line in enumerate(fh):
         if "Route #" in line:
@@ -77,16 +84,6 @@ def read_solution(file):
             routes[i] = [x for x in routes[i] ]
             routes[i].append("1")
     return routes
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 

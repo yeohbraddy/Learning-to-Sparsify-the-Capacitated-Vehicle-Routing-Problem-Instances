@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# Quartile class to calculate quartile features
+
 import numpy as np
 
 class Quartile:

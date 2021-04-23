@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
-
 import Constants as c
 import numpy as np
 import pandas as pd
@@ -10,31 +8,27 @@ import matplotlib as plt
 import networkx as nx
 from collections import defaultdict
 
-# In[7]:
-
+# Helper functions to generate a dataframe containing the edges and its relative information.
+# It also creates a graph that enables to calculate more features.
 
 def compare_coord_id(u, v):
     return u == v
 
-
 def check_edge_exists(tempSet, str1, str2):
     return str1 in tempSet or str2 in tempSet
 
-
+# We want to check if a certain edge exists if an arbitrary set, so we build
+# unique strings and store it
 def string_edge_builder(u, v):
     return "(" + u + ", " + v + ")"
-
 
 def create_edge_strings(u, v):
     return string_edge_builder(u, v), string_edge_builder(v, u)
 
-
 def calculate_weight(coord_u, coord_v):
-#     return np.hypot(int(coord_u[0]) - int(coord_v[0]), int(coord_u[1]) - int(coord_v[1]))
     a = np.array(coord_u)
     b = np.array(coord_v)
     return np.linalg.norm(a - b)
-
 
 def is_depot(node):
     return node == "1"
@@ -53,26 +47,9 @@ def get_edges_in_optimal_route(routes):
                 edges_in_optimal_route.add(coord_str1)
     return edges_in_optimal_route
 
-
-# def get_edges_in_optimal_route(edges_in_optimal_route, routes):
-# #     edges_in_optimal_route = set()
-
-#     for route in routes:
-#         curr = routes[route]
-
-#         for index in range(0, len(curr) - 1):
-#             coord_str1, coord_str2 = create_edge_strings(
-#                 curr[index], curr[index + 1])
-
-#             if not check_edge_exists(edges_in_optimal_route, coord_str1, coord_str2):
-#                 edges_in_optimal_route.add(coord_str1)
-#     return edges_in_optimal_route
-
-
 def init_incident_matrix(coords, matrix_size):
     arr = np.zeros((matrix_size, matrix_size))
     return label_matrix(coords, arr)
-
 
 def label_matrix(coords, arr):
     row_labels = [row for row in coords]
@@ -82,15 +59,17 @@ def label_matrix(coords, arr):
 
     return incidence_matrix
 
-
-def create_edges_df(coords, edges_in_optimal_route, file_name, demand, capacity, num_of_vehicles, num_of_nodes):
+# Creating a dataframe where each row is an edge containing features extracted from the instance file.
+# This dataframe serves as the core of the data for the machine learning and also allows us to compute other features.
+def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles, num_of_nodes):
+    edges_in_optimal_route = get_edges_in_optimal_route(routes)
+    # Calculates local edge rank by creating a distance matrix
     incidence_matrix = init_incident_matrix(coords, len(coords))
     edges_dict = defaultdict(list)
     edges_set = set()
     dict_global_edge_rank = {}
     index, row, column = 0, 1, 1
     num_of_nodes = int(num_of_nodes)
-    
     dbscan = []
 
     for u, coord_u in coords.items():
@@ -99,8 +78,8 @@ def create_edges_df(coords, edges_in_optimal_route, file_name, demand, capacity,
                 u, v), string_edge_builder(v, u)
 
             edge_weight = calculate_weight(coord_u, coord_v) / num_of_nodes
-            
-            if not compare_coord_id(u, v) and not check_edge_exists(edges_set, coord_str1, coord_str2):
+
+            if not compare_coord_id(u, v):
                 edges_set.add(coord_str1)
 
                 dbscan.append([coord_u[0], coord_u[1]])
@@ -118,10 +97,9 @@ def create_edges_df(coords, edges_in_optimal_route, file_name, demand, capacity,
                 edges_dict[c.FILE_NAME].append(file_name)
                 edges_dict[c.U_NODE_DEMAND].append(demand[int(u)] / num_of_nodes)
                 edges_dict[c.V_NODE_DEMAND].append(demand[int(v)] / num_of_nodes)
-#                 edges_dict[c.CAPACITY].append(capacity / num_of_nodes)
-#                 edges_dict[c.NUM_OF_VEHICLES].append(num_of_vehicles / num_of_nodes)
 
                 edges_dict[c.EDGE_WEIGHT].append(edge_weight)
+                # For networkx graph weights
                 edges_dict[c.EDGE_WEIGHT_NON_NORMALISED].append(edge_weight * num_of_nodes)
                 dict_global_edge_rank[index] = edge_weight
                 index += 1
@@ -165,4 +143,3 @@ def build_graph(df, is_optimal_edges_only=False):
 def plot_graph(G):
     nx.draw(G, with_labels=True)
     plt.show()
-# In[ ]:

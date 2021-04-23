@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# GlobalEdgeRank class to calculate global edge rank features
 
 
-import Constants as c, Quartile as q
-
-
-# In[2]:
+import Constants as c
 
 
 class GlobalEdgeRank:

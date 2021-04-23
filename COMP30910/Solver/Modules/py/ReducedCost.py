@@ -1,7 +1,10 @@
 import Constants as c, Quartile as q
 
+# ReducedCost class to calculate reduced cost features
+
 class ReducedCost:
     def __init__(self, reduced_cost_dict, num_of_nodes):
+        # Creates a dictionary we can query the key using an edge consisting of its node IDs
         self.reduced_cost_dict = reduced_cost_dict
         self.reduced_cost = []
         self.num_of_nodes = num_of_nodes
