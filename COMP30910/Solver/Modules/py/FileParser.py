@@ -11,8 +11,9 @@ def get_instances(path):
     return [f for f in listdir(path) if isfile(join(path, f))]
 
 def parse_num_vehicles(line):
-    x = re.findall(r"No of trucks: [0-9]", line)
-    return int(x[0][-1])
+    x = re.findall(r"No of trucks: [0-9]+", line)
+    num_vehicles = [int(s) for s in x[0].split() if s.isdigit()]
+    return int(num_vehicles[0])
 
 def parse_for_num(line):
     x = re.findall(r"[0-9]+", line)

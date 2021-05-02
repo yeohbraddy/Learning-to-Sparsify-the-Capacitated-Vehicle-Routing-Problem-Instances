@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import math
 import FileParser as fp
+import time
 
 # Implementation of the set based formulation solver
 
@@ -12,7 +13,7 @@ def solve(instance_file, file_name, is_pruned):
     # Reads instance data
     xc, yc, coords, q, Q, p, n, coords_node_id_dict = fp.read_instance(instance_file)
     
-    num_of_customers, distance_matrix, distance_warehouses, demands = calc_variables(n, xc, yc, q, is_pruned)
+    num_of_customers, distance_matrix, distance_warehouses, demands = calc_variables(n, xc, yc, q, is_pruned)  
 
     capacity = Q
     num_of_trucks = p
@@ -70,7 +71,10 @@ def solve(instance_file, file_name, is_pruned):
 
         mdl.close()
         
+        ls.param.time_limit = 300
+        
         ls.solve()
+        
 
         # Writes the solution in a file with the following format:
         # For each truck the nodes visited
@@ -84,34 +88,31 @@ def solve(instance_file, file_name, is_pruned):
                 for customer in customers_sequences[k].value:
                     f.write("%d " % (customer + 2))
                 f.write("\n")
-
+                
 def calc_variables(num_of_customers, xc, yc, demands, is_pruned):
-    
-    num_of_nodes = num_of_customers + 1
-    
     customers_x = xc[1:]
     customers_y = yc[1:]
     depot_x = xc[0]
     depot_y = yc[0]
 
+    path = os.getcwd() + "/Data/"
+    df = pd.read_csv(path + 'data_pruned.csv',
+                     index_col=0) if is_pruned else pd.DataFrame()
+    
     # Compute distance matrix
-    distance_matrix = calc_distance_matrix(customers_x, customers_y, is_pruned)
-    distance_warehouses = calc_distance_warehouse(
-        depot_x, depot_y, customers_x, customers_y)
+    distance_matrix = calc_distance_matrix(customers_x, customers_y, is_pruned, df)
+    distance_warehouses = calc_distance_warehouse(depot_x, depot_y, customers_x, customers_y, is_pruned, df)
 
     demands_list = list(demands.values())[1:]
     
     return num_of_customers, distance_matrix, distance_warehouses, demands_list
 
 # Computes the distance matrix
-def calc_distance_matrix(customers_x, customers_y, is_pruned):
-    path = os.getcwd() + "/Data/"
-    df = pd.read_csv(path + 'data_pruned.csv',
-                     index_col=0) if is_pruned else pd.DataFrame()
-    
+def calc_distance_matrix(customers_x, customers_y, is_pruned, df):
     num_of_customers = len(customers_x)
     distance_matrix = [[None for i in range(
         num_of_customers)] for j in range(num_of_customers)]
+
     for i in range(num_of_customers):
         distance_matrix[i][i] = 0
         for j in range(num_of_customers):
@@ -130,22 +131,43 @@ def calc_distance_matrix(customers_x, customers_y, is_pruned):
                     (df['IS_OPTIMAL_EDGE_PRUNE'] == 1)
                 ]
                 
-                if len(row) > 0:
-                    is_optimal_edge = True
-
-                distance_matrix[i][j] = dist if is_optimal_edge else 100 * 100
-                distance_matrix[j][i] = dist if is_optimal_edge else 100 * 100
-            else:
-                distance_matrix[i][j] = dist
-                distance_matrix[j][i] = dist
+                if len(row) == 0:                  
+                    dist = 99999999
+            
+            distance_matrix[i][j] = dist
+            distance_matrix[j][i] = dist
     return distance_matrix
 
 # Computes the distances to warehouse
-def calc_distance_warehouse(depot_x, depot_y, customers_x, customers_y):
+def calc_distance_warehouse(depot_x, depot_y, customers_x, customers_y, is_pruned, df):   
     num_of_customers = len(customers_x)
     distance_warehouses = [None] * num_of_customers
     for i in range(num_of_customers):
         dist = calc_dist(depot_x, customers_x[i], depot_y, customers_y[i])
+        
+        is_optimal_edge = False
+            
+        # Keeping only the positively predicted edges
+        if is_pruned:
+            row0 = df.loc[
+                (df['U_X'] == depot_x) &
+                (df['U_Y'] == depot_y) &
+                (df['V_X'] == customers_x[i]) &
+                (df['V_Y'] == customers_y[i]) &
+                (df['IS_OPTIMAL_EDGE_PRUNE'] == 1)
+            ]
+            
+            row1 = df.loc[
+                (df['U_X'] == customers_x[i]) &
+                (df['U_Y'] == customers_y[i]) &
+                (df['V_X'] == depot_x) &
+                (df['V_Y'] == depot_y) &
+                (df['IS_OPTIMAL_EDGE_PRUNE'] == 1)
+            ]
+
+            if len(row0) == 0 or len(row1) == 0:
+                dist = 99999999
+        
         distance_warehouses[i] = dist
     return distance_warehouses
 

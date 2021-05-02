@@ -43,7 +43,6 @@ def solve(file_name, instance, is_binary=True, enable_logging=True, is_pruned=Fa
     
     x = mdl.addVars(A, vtype=vtype)
     
-    
     u = mdl.addVars(N, vtype=GRB.CONTINUOUS)
     mdl.update()
     
@@ -52,10 +51,6 @@ def solve(file_name, instance, is_binary=True, enable_logging=True, is_pruned=Fa
     mdl.update()
 
     mdl.addConstrs(quicksum(x[i, j] for i in V if i !=j and (i, j) in x) == 1 for j in N)
-    
-    for j in N:
-        mdl.addConstr(quicksum(x[(i, j)] for i in V) == 1)
-    mdl.update()
 
     mdl.addConstrs(quicksum(x[i, j] for j in V if j != i and (i, j) in x) == 1 for i in N)
     mdl.update()

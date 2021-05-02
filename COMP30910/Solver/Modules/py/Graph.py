@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib as plt
 import networkx as nx
 from collections import defaultdict
+import time
 
 # Helper functions to generate a dataframe containing the edges and its relative information.
 # It also creates a graph that enables to calculate more features.
@@ -35,7 +36,6 @@ def is_depot(node):
 
 def get_edges_in_optimal_route(routes):
     edges_in_optimal_route = set()
-
     for route in routes:
         curr = routes[route]
 
@@ -43,8 +43,9 @@ def get_edges_in_optimal_route(routes):
             coord_str1, coord_str2 = create_edge_strings(
                 curr[index], curr[index + 1])
 
-            if not check_edge_exists(edges_in_optimal_route, coord_str1, coord_str2):
-                edges_in_optimal_route.add(coord_str1)
+#             if not check_edge_exists(edges_in_optimal_route, coord_str1, coord_str2):
+            edges_in_optimal_route.add(coord_str1)
+            edges_in_optimal_route.add(coord_str2)
     return edges_in_optimal_route
 
 def init_incident_matrix(coords, matrix_size):
@@ -66,22 +67,18 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
     # Calculates local edge rank by creating a distance matrix
     incidence_matrix = init_incident_matrix(coords, len(coords))
     edges_dict = defaultdict(list)
-    edges_set = set()
     dict_global_edge_rank = {}
-    index, row, column = 0, 1, 1
+    index = 0
     num_of_nodes = int(num_of_nodes)
     dbscan = []
 
     for u, coord_u in coords.items():
         for v, coord_v in coords.items():
-            coord_str1, coord_str2 = string_edge_builder(
-                u, v), string_edge_builder(v, u)
-
-            edge_weight = calculate_weight(coord_u, coord_v) / num_of_nodes
-
             if not compare_coord_id(u, v):
-                edges_set.add(coord_str1)
+                coord_str1, coord_str2 = string_edge_builder(u, v), string_edge_builder(v, u)
 
+                edge_weight = calculate_weight(coord_u, coord_v) / num_of_nodes
+         
                 dbscan.append([coord_u[0], coord_u[1]])
 
                 edges_dict[c.U_X].append(coord_u[0])
@@ -118,11 +115,7 @@ def create_edges_df(coords, routes, file_name, demand, capacity, num_of_vehicles
                 else:
                     edges_dict[c.IS_NODE_U_DEPOT].append(0)
                     edges_dict[c.IS_NODE_V_DEPOT].append(0)
-            incidence_matrix[str(row)][str(column)] = edge_weight
-            column += 1
-        column = 0
-        row += 1
-        
+                incidence_matrix[str(u)][str(v)] = edge_weight 
     return pd.DataFrame(edges_dict), dict_global_edge_rank, incidence_matrix, dbscan
 
 

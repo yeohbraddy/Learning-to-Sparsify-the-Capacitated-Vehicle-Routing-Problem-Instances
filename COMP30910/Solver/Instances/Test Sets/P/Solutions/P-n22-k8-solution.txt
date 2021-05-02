@@ -1,0 +1,8 @@
+Route #1: 22 18 13 
+Route #2: 20 
+Route #3: 19 21 15 
+Route #4: 11 9 4 5 
+Route #5: 17 16 
+Route #6: 12 14 
+Route #7: 7 2 3 8 
+Route #8: 10 6 
