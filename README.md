@@ -34,12 +34,6 @@
   </a>
 
   <h3 align="center">Learning to Sparsify the Capacitated Vehicle Routing Problem Instances</h3>
-
-  <p align="center">
-    This project is the implementation of my FYP.
-    <br />
-    <a href="https://csgitlab.ucd.ie/yeohbraddy/fyp-braddy"><strong>Explore the docs »</strong></a>
-  </p>
 </p>
 
 <!-- TABLE OF CONTENTS -->
