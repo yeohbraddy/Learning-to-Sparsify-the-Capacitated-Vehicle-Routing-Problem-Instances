@@ -129,9 +129,9 @@ solve_pruned = False
 solve_unpruned = False
 ```
 
-The test instance should be placed in fyp-braddy/Instances/Instances - Prune and its respective solution in fyp-braddy/Instances/Solutions - Prune.
+The test instance should be placed in /Instances/Instances - Prune and its respective solution in /Instances/Solutions - Prune.
 
-Then run fyp-braddy/Modules/ipynb/Model.ipynb to train the models and prune the instance (this takes some time). You are able to vary the decision threshold under the prune section of the notebook by replacing the THRESHOLD:
+Then run /Modules/ipynb/Model.ipynb to train the models and prune the instance (this takes some time). You are able to vary the decision threshold under the prune section of the notebook by replacing the THRESHOLD:
 
 ```
 decision_function = np.where(rf_clf.predict_proba(extracted_X_val)[:,1] >= THRESHOLD, 1, 0)
@@ -166,7 +166,7 @@ solve_pruned = False
 solve_unpruned = True
 ```
 
-As you vary the threshold of the pruned instance in model.ipynb, you can execute Main.py to run on the newly pruned instance to measure the objective function value and running time.
+As you vary the threshold of the pruned instance in Model.ipynb, you can execute Main.py to run on the newly pruned instance to measure the objective function value and running time.
 
 Unfortunately, each instance has different performances so the evaluation of the performances of both the unpruned and prune instance was manually recorded.
 
