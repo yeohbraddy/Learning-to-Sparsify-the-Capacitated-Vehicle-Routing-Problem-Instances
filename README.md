@@ -79,10 +79,10 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-- Ensure LocalSolver license is on your machine. Visit their to request a free license and follow the steps to install their software.
-- Ensure Gurobi license is on your machine. Visit their site to request a free license and follow the steps to install their software.
+- LocalSolver version 10. Ensure LocalSolver license is on your machine. Visit their to request a free license and follow the steps to install their software.
+- Gurobi version 9.1. Ensure Gurobi license is on your machine. Visit their site to request a free license and follow the steps to install their software.
 - Jupyter notebook.
-- Python modules
+- Python version 3.9.
 
 ### Installation
 
