@@ -6,3 +6,4 @@ gurobipy
 imblearn
 networkx
 scipy
+mlxtend
