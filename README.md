@@ -79,6 +79,7 @@ CVRP is traditionally solved by using exact algorithms or heuristics. Exact algo
 - [Matplotlib](https://matplotlib.org/)
 - [Imbalanced-learn](https://imbalanced-learn.org/stable/)
 - [Mlxtend](http://rasbt.github.io/mlxtend/)
+- [CVRP Instances](http://dimacs.rutgers.edu/programs/challenge/vrp/cvrp/)
 
 <!-- GETTING STARTED -->
 
