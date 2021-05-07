@@ -63,13 +63,22 @@
 
 ## About The Project
 
-In this project, classification is utilized to classify whether an edge is part of the optimal solution of the Capacitated Vehicle Routing Problem (CVRP), an NP-hard combinatorial optimization problem. The random forest classifier learns through features that capture the essence of whether an edge is part of the optimal solution. It then classifies edges of unseen CVRP instances to prune away any negatively labeled edges as these are not part of the solution. The experiments measure the improvement of the optimality gap and running time of the solver between the unpruned instance and the pruned instance. The results demonstrated good performance on a variety of instances that have different characteristics. For example, prior to pruning, the solver took 300 seconds with a non-zero optimality gap to solve a particular instance. After pruning, the solver took less than 10 seconds and achieved a zero optimality gap.
+This project aims to leverage classification as it is efficient, scalable, and does not lose optimality. The goal is to prune edges that are not part of the optimal solution to decrease the running times while maintaining optimality for exact algorithms. As the problem is NP-hard, any reduction in the problem size will result in evident improvements in the run time given a large enough problem. Classification models learn through features that capture the essence of whether an edge is part of the optimal solution. The best performing model then classifies the edges of unseen CVRP instances to prune away edges that are not part of the solution. The results showcased the best performing model, the random forest, is able to generalise and prune at least half of the edges of unseen CVRP instances, decrease the running time, and maintain optimality. Furthermore, for certain instances, it reduced the running time from 300 seconds to less than 10 seconds after pruning while maintaining optimality. It demonstrates the proposed method in this project is efficient, scalable, and does not lose optimality.
 
 ### Built With
 
-- [Sklearn](https://scikit-learn.org/stable/)
+- [Scikit-learn](https://scikit-learn.org/stable/)
 - [LocalSolver](https://www.localsolver.com/docs/last/index.html)
 - [Gurobi](https://www.gurobi.com/)
+- [Python](https://www.python.org/)
+- [SciPy](https://www.scipy.org/)
+- [NumPy](https://numpy.org/)
+- [Pandas](https://pandas.pydata.org/)
+- [NetworkX](https://networkx.org/documentation/stable/index.html)
+- [Jupyter](https://jupyter.org/)
+- [Matplotlib](https://matplotlib.org/)
+- [Imbalanced-learn](https://imbalanced-learn.org/stable/)
+- [Mlxtend](http://rasbt.github.io/mlxtend/)
 
 <!-- GETTING STARTED -->
 
@@ -79,8 +88,8 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-- LocalSolver version 10. Ensure LocalSolver license is on your machine. Visit their to request a free license and follow the steps to install their software.
-- Gurobi version 9.1. Ensure Gurobi license is on your machine. Visit their site to request a free license and follow the steps to install their software.
+- [LocalSolver](https://www.localsolver.com/docs/last/index.html) version 10. Ensure LocalSolver license is on your machine. Visit their to request a free license and follow the steps to install their software.
+- [Gurobi](https://www.gurobi.com/) version 9.1. Ensure Gurobi license is on your machine. Visit their site to request a free license and follow the steps to install their software.
 - Jupyter notebook.
 - Python version 3.9.
 
@@ -108,9 +117,9 @@ From the root of the project, run:
 jupyter notebook
 ```
 
-to access the machine learning model notebook to view the machine learning evaluation charts after pruning.
+to access the machine learning model notebook /Modules/ipynb/Model.ipynb. It contains the evaluation charts about the training and testing of the model.
 
-From the CLI, run:
+Run the code from an IDE or alternatively, from the CLI:
 
 ```sh
 python Main.py
@@ -180,7 +189,13 @@ Braddy Yeoh - braddy.yeoh@ucdconnect.ie
 
 ## Acknowledgements
 
-I would like to thank Dr. Deepak Ajwani for his help, my family, friends, Alan Fahey for their support, especially during difficult times, and finally Robin Lee for letting me use his compute server.
+I would like to deeply thank and appreciate the following people:
+
+- Dr. Deepak Ajwani for his expert knowledge and amazing help.
+- James Fitzpatrick for his advice on this project.
+- Alan Fahey, my SAP manager, for his support, especially during difficult times.
+- Robin Lee for letting me use his compute server.
+- My friends and family for their support.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
